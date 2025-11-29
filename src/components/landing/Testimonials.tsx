@@ -26,14 +26,14 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="py-20 lg:py-32 bg-white">
+    <section className="py-20 lg:py-32 bg-white dark:bg-[#1A1A2E]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A2E]">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A2E] dark:text-white">
             Loved by teams everywhere
           </h2>
-          <p className="mt-4 text-lg text-[#4A4A68]">
+          <p className="mt-4 text-lg text-[#4A4A68] dark:text-[#9CA3AF]">
             See what our customers have to say about Projex.
           </p>
         </div>
@@ -43,7 +43,7 @@ export function Testimonials() {
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.name}
-              className="relative p-8 rounded-xl bg-[#F8F9FC] border border-[#E5E7EB] hover:shadow-lg transition-shadow"
+              className="relative p-8 rounded-xl bg-[#F8F9FC] dark:bg-[#2D2D44] border border-[#E5E7EB] dark:border-[#3D3D54] hover:shadow-lg dark:hover:shadow-[#F97316]/5 transition-shadow"
             >
               {/* Quote Icon */}
               <div className="absolute -top-4 left-8">
@@ -53,7 +53,7 @@ export function Testimonials() {
               </div>
 
               {/* Quote */}
-              <p className="text-[#4A4A68] leading-relaxed mt-2">
+              <p className="text-[#4A4A68] dark:text-[#9CA3AF] leading-relaxed mt-2">
                 "{testimonial.quote}"
               </p>
 
@@ -65,7 +65,7 @@ export function Testimonials() {
                   </span>
                 </div>
                 <div>
-                  <p className="font-semibold text-[#1A1A2E]">
+                  <p className="font-semibold text-[#1A1A2E] dark:text-white">
                     {testimonial.name}
                   </p>
                   <p className="text-sm text-[#6B7280]">{testimonial.role}</p>

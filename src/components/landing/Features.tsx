@@ -42,17 +42,17 @@ const features = [
 
 export function Features() {
   return (
-    <section id="features" className="py-20 lg:py-32 bg-white">
+    <section id="features" className="py-20 lg:py-32 bg-white dark:bg-[#1A1A2E]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A2E]">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A2E] dark:text-white">
             Everything you need to{" "}
             <span className="bg-gradient-to-r from-[#F97316] to-[#EC4899] bg-clip-text text-transparent">
               ship
             </span>
           </h2>
-          <p className="mt-4 text-lg text-[#4A4A68]">
+          <p className="mt-4 text-lg text-[#4A4A68] dark:text-[#9CA3AF]">
             All the tools your team needs to plan, track, and deliver great work.
           </p>
         </div>
@@ -62,7 +62,7 @@ export function Features() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="group p-6 rounded-xl bg-white border border-[#E5E7EB] hover:border-[#F97316]/30 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+              className="group p-6 rounded-xl bg-white dark:bg-[#2D2D44] border border-[#E5E7EB] dark:border-[#3D3D54] hover:border-[#F97316]/30 hover:shadow-lg dark:hover:shadow-[#F97316]/10 transition-all duration-300 hover:-translate-y-1"
             >
               {/* Icon */}
               <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#F97316] to-[#EC4899] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -70,10 +70,10 @@ export function Features() {
               </div>
 
               {/* Content */}
-              <h3 className="text-xl font-semibold text-[#1A1A2E] mb-2">
+              <h3 className="text-xl font-semibold text-[#1A1A2E] dark:text-white mb-2">
                 {feature.title}
               </h3>
-              <p className="text-[#4A4A68] leading-relaxed">
+              <p className="text-[#4A4A68] dark:text-[#9CA3AF] leading-relaxed">
                 {feature.description}
               </p>
             </div>

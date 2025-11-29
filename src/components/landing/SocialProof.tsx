@@ -9,7 +9,7 @@ const companies = [
 
 export function SocialProof() {
   return (
-    <section className="py-12 bg-[#F8F9FC] border-y border-[#E5E7EB]">
+    <section className="py-12 bg-[#F8F9FC] dark:bg-[#1A1A2E] border-y border-[#E5E7EB] dark:border-[#2D2D44]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <p className="text-center text-sm text-[#6B7280] mb-8">
           Trusted by teams at
@@ -18,7 +18,7 @@ export function SocialProof() {
           {companies.map((company) => (
             <div
               key={company}
-              className="text-2xl font-bold text-[#9CA3AF] hover:text-[#6B7280] transition-colors cursor-default"
+              className="text-2xl font-bold text-[#9CA3AF] dark:text-[#4A4A68] hover:text-[#6B7280] dark:hover:text-[#6B7280] transition-colors cursor-default"
             >
               {company}
             </div>

@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 
 export function CTA() {
   return (
-    <section className="py-20 lg:py-32 bg-[#1A1A2E] relative overflow-hidden">
+    <section className="py-20 lg:py-32 bg-[#1A1A2E] dark:bg-[#0F0F1A] relative overflow-hidden">
       {/* Background Gradient Accent */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-[#F97316]/20 to-[#EC4899]/20 blur-3xl rounded-full" />
 
@@ -25,7 +25,7 @@ export function CTA() {
           <input
             type="email"
             placeholder="Enter your email"
-            className="w-full px-5 py-4 rounded-lg bg-[#2D2D44] border border-[#4A4A68] text-white placeholder-[#6B7280] focus:outline-none focus:border-[#F97316] transition-colors"
+            className="w-full px-5 py-4 rounded-lg bg-[#2D2D44] dark:bg-[#1A1A2E] border border-[#4A4A68] dark:border-[#2D2D44] text-white placeholder-[#6B7280] focus:outline-none focus:border-[#F97316] transition-colors"
           />
           <button className="w-full sm:w-auto px-8 py-4 text-white font-semibold rounded-lg bg-gradient-to-r from-[#F97316] to-[#EC4899] hover:from-[#EA580C] hover:to-[#DB2777] transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 whitespace-nowrap">
             Get Started
