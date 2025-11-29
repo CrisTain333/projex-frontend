@@ -1,53 +1,28 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Search, Grid, List, MoreHorizontal, FolderKanban } from "lucide-react";
-
-const projects = [
-  {
-    id: "1",
-    name: "Website Redesign",
-    description: "Complete overhaul of the company website",
-    status: "In Progress",
-    progress: 65,
-    members: 5,
-    tasks: { completed: 24, total: 36 },
-  },
-  {
-    id: "2",
-    name: "Mobile App v2",
-    description: "Version 2 of the mobile application",
-    status: "In Progress",
-    progress: 40,
-    members: 4,
-    tasks: { completed: 12, total: 30 },
-  },
-  {
-    id: "3",
-    name: "API Integration",
-    description: "Third-party API integrations",
-    status: "Review",
-    progress: 90,
-    members: 3,
-    tasks: { completed: 18, total: 20 },
-  },
-  {
-    id: "4",
-    name: "Marketing Campaign",
-    description: "Q1 marketing campaign planning",
-    status: "Planning",
-    progress: 15,
-    members: 6,
-    tasks: { completed: 3, total: 20 },
-  },
-];
+import { useProjects } from "@/hooks/api/useProjects";
+import { Button, Spinner, EmptyState } from "@/components/ui";
+import { CreateProjectModal } from "@/components/projects/CreateProjectModal";
 
 export function ProjectsPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  const filteredProjects = projects.filter((project) =>
+  const { data: projects, isLoading } = useProjects();
+
+  const filteredProjects = projects?.filter((project) =>
     project.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  ) || [];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -61,13 +36,12 @@ export function ProjectsPage() {
             Manage and track all your projects
           </p>
         </div>
-        <Link
-          to="/dashboard/projects/new"
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-white font-medium rounded-lg bg-gradient-to-r from-[#F97316] to-[#EC4899] hover:from-[#EA580C] hover:to-[#DB2777] transition-all"
+        <Button
+          onClick={() => setIsCreateModalOpen(true)}
+          leftIcon={<Plus size={20} />}
         >
-          <Plus size={20} />
           New Project
-        </Link>
+        </Button>
       </div>
 
       {/* Filters */}
@@ -107,7 +81,18 @@ export function ProjectsPage() {
       </div>
 
       {/* Projects Grid/List */}
-      {viewMode === "grid" ? (
+      {filteredProjects.length === 0 ? (
+        <EmptyState
+          icon={<FolderKanban size={48} />}
+          title="No projects yet"
+          description="Create your first project to start managing tasks"
+          action={
+            <Button onClick={() => setIsCreateModalOpen(true)} leftIcon={<Plus size={18} />}>
+              Create Project
+            </Button>
+          }
+        />
+      ) : viewMode === "grid" ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredProjects.map((project) => (
             <Link
@@ -134,48 +119,24 @@ export function ProjectsPage() {
                 {project.name}
               </h3>
               <p className="text-sm text-[#6B7280] mb-4 line-clamp-2">
-                {project.description}
+                {project.description || "No description"}
               </p>
 
-              {/* Progress */}
-              <div className="mb-4">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs text-[#6B7280]">Progress</span>
-                  <span className="text-xs font-medium text-[#4A4A68] dark:text-[#9CA3AF]">
-                    {project.progress}%
-                  </span>
-                </div>
-                <div className="h-2 bg-[#E5E7EB] dark:bg-[#2D2D44] rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-[#F97316] to-[#EC4899] rounded-full"
-                    style={{ width: `${project.progress}%` }}
-                  />
-                </div>
+              {/* Project Info */}
+              <div className="flex items-center gap-4 text-sm text-[#6B7280] mb-4">
+                <span className="px-2.5 py-1 bg-[#F8F9FC] dark:bg-[#2D2D44] rounded text-xs font-medium uppercase">
+                  {project.key}
+                </span>
+                <span>{project.boardType === "kanban" ? "Kanban" : "Scrum"}</span>
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between text-sm pt-3 border-t border-[#E5E7EB] dark:border-[#2D2D44]">
                 <span className="text-[#6B7280]">
-                  {project.tasks.completed}/{project.tasks.total} tasks
+                  {project.issueCount} issues
                 </span>
-                <div className="flex -space-x-2">
-                  {[...Array(Math.min(project.members, 3))].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-6 h-6 rounded-full bg-gradient-to-br from-[#F97316] to-[#EC4899] border-2 border-white dark:border-[#1A1A2E] flex items-center justify-center"
-                    >
-                      <span className="text-white text-[10px] font-medium">
-                        {String.fromCharCode(65 + i)}
-                      </span>
-                    </div>
-                  ))}
-                  {project.members > 3 && (
-                    <div className="w-6 h-6 rounded-full bg-[#E5E7EB] dark:bg-[#2D2D44] border-2 border-white dark:border-[#1A1A2E] flex items-center justify-center">
-                      <span className="text-[10px] font-medium text-[#6B7280]">
-                        +{project.members - 3}
-                      </span>
-                    </div>
-                  )}
+                <div className="flex items-center gap-1 text-[#6B7280]">
+                  <span>{project.memberCount} members</span>
                 </div>
               </div>
             </Link>
@@ -190,13 +151,13 @@ export function ProjectsPage() {
                   Project
                 </th>
                 <th className="text-left px-5 py-3 text-sm font-medium text-[#6B7280] hidden sm:table-cell">
-                  Status
+                  Key
                 </th>
                 <th className="text-left px-5 py-3 text-sm font-medium text-[#6B7280] hidden md:table-cell">
-                  Progress
+                  Type
                 </th>
                 <th className="text-left px-5 py-3 text-sm font-medium text-[#6B7280] hidden lg:table-cell">
-                  Tasks
+                  Issues
                 </th>
                 <th className="w-10"></th>
               </tr>
@@ -220,32 +181,24 @@ export function ProjectsPage() {
                           {project.name}
                         </p>
                         <p className="text-sm text-[#6B7280] hidden sm:block">
-                          {project.description}
+                          {project.description || "No description"}
                         </p>
                       </div>
                     </Link>
                   </td>
                   <td className="px-5 py-4 hidden sm:table-cell">
-                    <span className="inline-flex px-2.5 py-1 text-xs font-medium rounded-full bg-[#F97316]/10 text-[#F97316]">
-                      {project.status}
+                    <span className="inline-flex px-2.5 py-1 text-xs font-medium rounded bg-[#F8F9FC] dark:bg-[#2D2D44] text-[#4A4A68] dark:text-[#9CA3AF] uppercase">
+                      {project.key}
                     </span>
                   </td>
                   <td className="px-5 py-4 hidden md:table-cell">
-                    <div className="flex items-center gap-3">
-                      <div className="w-24 h-2 bg-[#E5E7EB] dark:bg-[#2D2D44] rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-[#F97316] to-[#EC4899] rounded-full"
-                          style={{ width: `${project.progress}%` }}
-                        />
-                      </div>
-                      <span className="text-sm text-[#6B7280]">
-                        {project.progress}%
-                      </span>
-                    </div>
+                    <span className="text-sm text-[#6B7280]">
+                      {project.boardType === "kanban" ? "Kanban" : "Scrum"}
+                    </span>
                   </td>
                   <td className="px-5 py-4 hidden lg:table-cell">
                     <span className="text-sm text-[#6B7280]">
-                      {project.tasks.completed}/{project.tasks.total}
+                      {project.issueCount}
                     </span>
                   </td>
                   <td className="px-5 py-4">
@@ -259,6 +212,12 @@ export function ProjectsPage() {
           </table>
         </div>
       )}
+
+      {/* Create Project Modal */}
+      <CreateProjectModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      />
     </div>
   );
 }
