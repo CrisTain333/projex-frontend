@@ -1,29 +1,8 @@
-import {
-  Navbar,
-  Hero,
-  SocialProof,
-  Features,
-  HowItWorks,
-  Testimonials,
-  CTA,
-  Footer,
-} from "@/components/landing";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
 
 const App = () => {
-  return (
-    <div className="min-h-screen">
-      <Navbar />
-      <main>
-        <Hero />
-        <SocialProof />
-        <Features />
-        <HowItWorks />
-        <Testimonials />
-        <CTA />
-      </main>
-      <Footer />
-    </div>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;

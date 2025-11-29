@@ -1,5 +1,3 @@
-import { Play } from "lucide-react";
-
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-white via-[#F8F9FC] to-white dark:from-[#1A1A2E] dark:via-[#1A1A2E] dark:to-[#2D2D44] py-20 lg:py-32">
