@@ -1,0 +1,78 @@
+Page Structure:
+1. Navbar (Sticky)
+
+Logo (P mark + "Projex" wordmark) — left
+Nav links: Features, Pricing, Docs, Blog — center
+CTA buttons: "Login" (ghost), "Get Started Free" (gradient fill) — right
+
+2. Hero Section
+
+Headline: "Manage projects, ship faster"
+Subheadline: "The modern project management tool for teams who want clarity, speed, and simplicity."
+Primary CTA: "Start for Free" (gradient button)
+Secondary CTA: "See how it works" (ghost button with play icon)
+Hero image: Dashboard/board view mockup with subtle shadow
+Background: Light gradient mesh or subtle grid pattern
+
+3. Social Proof Bar
+
+"Trusted by teams at" + grayscale company logos
+
+4. Features Section
+
+Section title: "Everything you need to ship"
+3-column grid of feature cards:
+
+Spaces & Projects — Organize work hierarchically
+Kanban & Scrum Boards — Visualize progress your way
+Epics & Roadmaps — Plan big picture initiatives
+Real-time Collaboration — Comments, mentions, updates
+Smart Notifications — Stay informed, not overwhelmed
+Fast Search — Find anything in milliseconds
+
+
+Each card: Icon (gradient), title, short description
+
+5. Product Screenshot Section
+
+Large browser mockup showing the board view
+Floating UI elements highlighting features
+Subtle gradient glow behind
+
+6. How It Works
+
+3 steps with illustrations:
+
+Create your space
+Invite your team
+Start shipping
+
+
+
+7. Testimonials
+
+3 testimonial cards with avatar, quote, name, role
+
+8. Pricing Section (Optional for MVP)
+
+Free tier + Pro tier comparison
+
+9. CTA Section
+
+Dark background with gradient accent
+"Ready to transform how your team works?"
+Email input + "Get Started" button
+
+10. Footer
+
+Logo, navigation links, social icons
+"© 2025 Projex. All rights reserved."
+
+
+Design Guidelines:
+
+Border radius: 12px for cards, 8px for buttons, 6px for inputs
+Shadows: Subtle, layered (0 4px 20px rgba(0,0,0,0.08))
+Spacing: Generous whitespace, 80-120px section padding
+Animations: Subtle fade-in on scroll, hover lifts on cards
+Mobile: Fully responsive, hamburger menu on mobile
