@@ -4,6 +4,10 @@ import {
   LandingPage,
   LoginPage,
   SignupPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  VerifyEmailPage,
+  AcceptInvitePage,
   DashboardHome,
   ProjectsPage,
   BoardPage,
@@ -18,6 +22,8 @@ export const router = createBrowserRouter([
     path: "/",
     element: <LandingPage />,
   },
+
+  // Auth routes
   {
     path: "/login",
     element: <LoginPage />,
@@ -25,6 +31,22 @@ export const router = createBrowserRouter([
   {
     path: "/signup",
     element: <SignupPage />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordPage />,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPasswordPage />,
+  },
+  {
+    path: "/verify-email",
+    element: <VerifyEmailPage />,
+  },
+  {
+    path: "/accept-invite",
+    element: <AcceptInvitePage />,
   },
 
   // Dashboard routes (protected - will add auth later)
