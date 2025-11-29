@@ -2,14 +2,16 @@ import { ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 import { Button } from './Button';
 
+interface EmptyStateActionConfig {
+  label: string;
+  onClick: () => void;
+}
+
 interface EmptyStateProps {
   icon?: ReactNode;
   title: string;
   description?: string;
-  action?: {
-    label: string;
-    onClick: () => void;
-  };
+  action?: EmptyStateActionConfig | ReactNode;
   className?: string;
 }
 
@@ -20,6 +22,23 @@ export function EmptyState({
   action,
   className,
 }: EmptyStateProps) {
+  const renderAction = () => {
+    if (!action) return null;
+
+    // Check if action is a config object with label and onClick
+    if (typeof action === 'object' && action !== null && 'label' in action && 'onClick' in action) {
+      const actionConfig = action as EmptyStateActionConfig;
+      return (
+        <Button onClick={actionConfig.onClick}>
+          {actionConfig.label}
+        </Button>
+      );
+    }
+
+    // Otherwise, render it as a ReactNode
+    return action;
+  };
+
   return (
     <div
       className={cn(
@@ -40,11 +59,7 @@ export function EmptyState({
           {description}
         </p>
       )}
-      {action && (
-        <Button onClick={action.onClick}>
-          {action.label}
-        </Button>
-      )}
+      {renderAction()}
     </div>
   );
 }

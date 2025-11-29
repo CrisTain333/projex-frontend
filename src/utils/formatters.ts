@@ -42,6 +42,9 @@ export function formatTimeAgo(date: string | Date): string {
   return formatDistanceToNow(d, { addSuffix: true });
 }
 
+// Alias for formatTimeAgo
+export const formatRelativeTime = formatTimeAgo;
+
 // Number Formatters
 export function formatNumber(num: number): string {
   return new Intl.NumberFormat().format(num);

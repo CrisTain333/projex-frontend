@@ -44,6 +44,7 @@ export const QUERY_KEYS = {
   // Notifications
   NOTIFICATIONS: ['notifications'] as const,
   NOTIFICATION_PREFERENCES: ['notifications', 'preferences'] as const,
+  UNREAD_NOTIFICATION_COUNT: ['notifications', 'unread-count'] as const,
 
   // Attachments
   ISSUE_ATTACHMENTS: (issueId: string) => ['attachments', issueId] as const,

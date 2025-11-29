@@ -93,17 +93,19 @@ export const createProjectSchema = z.object({
 
 // Issue schemas
 export const createIssueSchema = z.object({
+  projectId: z.string().min(1, 'Project is required'),
   title: z
     .string()
     .min(1, 'Title is required')
     .max(200, 'Title must be less than 200 characters'),
-  type: z.enum(['epic', 'story', 'bug', 'task', 'subtask']),
+  type: z.enum(['epic', 'story', 'bug', 'task', 'subtask', 'feature']),
   description: z.string().optional(),
-  priority: z.enum(['critical', 'high', 'medium', 'low']).optional(),
+  priority: z.enum(['highest', 'high', 'medium', 'low', 'lowest']).optional(),
   assigneeId: z.string().optional(),
   epicId: z.string().optional(),
   labelIds: z.array(z.string()).optional(),
   dueDate: z.string().optional(),
+  storyPoints: z.number().optional(),
 });
 
 export const updateIssueSchema = createIssueSchema.partial();

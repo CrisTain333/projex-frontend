@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { Issue, IssueStatus } from '@/types';
 
-interface BoardFilters {
+export interface BoardFilters {
   search: string;
   assigneeIds: string[];
   labelIds: string[];
@@ -10,7 +10,7 @@ interface BoardFilters {
   epicId: string | null;
 }
 
-interface BoardState {
+export interface BoardState {
   // Issues grouped by status
   issues: Record<IssueStatus, Issue[]>;
 
@@ -34,6 +34,7 @@ interface BoardState {
 
   // Filter actions
   setFilter: <K extends keyof BoardFilters>(key: K, value: BoardFilters[K]) => void;
+  setFilters: (filters: Partial<BoardFilters>) => void;
   resetFilters: () => void;
 
   // View settings
@@ -57,10 +58,12 @@ const defaultFilters: BoardFilters = {
 };
 
 const defaultIssues: Record<IssueStatus, Issue[]> = {
+  backlog: [],
   todo: [],
   in_progress: [],
-  review: [],
+  in_review: [],
   done: [],
+  cancelled: [],
 };
 
 export const useBoardStore = create<BoardState>((set) => ({
@@ -152,6 +155,11 @@ export const useBoardStore = create<BoardState>((set) => ({
   setFilter: (key, value) =>
     set((state) => ({
       filters: { ...state.filters, [key]: value },
+    })),
+
+  setFilters: (filters) =>
+    set((state) => ({
+      filters: { ...state.filters, ...filters },
     })),
 
   resetFilters: () => set({ filters: { ...defaultFilters } }),

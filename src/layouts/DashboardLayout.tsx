@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   FolderKanban,
@@ -7,18 +7,24 @@ import {
   Users,
   Settings,
   Search,
-  Bell,
   ChevronDown,
   Menu,
   X,
   Plus,
   LogOut,
+  Layers,
+  Command,
 } from "lucide-react";
 import brandLogo from "@/assets/brand_logo.png";
 import { ThemeToggle } from "@/components/landing";
+import { useAuthStore, useUIStore } from "@/stores";
+import { useLogout } from "@/hooks/api/useAuth";
+import { Avatar } from "@/components/ui";
+import { NotificationDropdown, CommandPalette } from "@/components/common";
 
 const sidebarLinks = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
+  { icon: Layers, label: "Spaces", href: "/dashboard/spaces" },
   { icon: FolderKanban, label: "Projects", href: "/dashboard/projects" },
   { icon: Calendar, label: "Calendar", href: "/dashboard/calendar" },
   { icon: Users, label: "Team", href: "/dashboard/team" },
@@ -28,6 +34,37 @@ const sidebarLinks = [
 export function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuthStore();
+  const { sidebarCollapsed } = useUIStore();
+  const logoutMutation = useLogout();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
+
+  const getUserInitials = () => {
+    if (!user) return "U";
+    if (user.firstName && user.lastName) {
+      return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+    }
+    return user.email?.[0]?.toUpperCase() || "U";
+  };
+
+  const getUserDisplayName = () => {
+    if (!user) return "User";
+    if (user.firstName && user.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+    return user.email || "User";
+  };
 
   return (
     <div className="min-h-screen bg-[#F8F9FC] dark:bg-[#0F0F1A]">
@@ -97,16 +134,22 @@ export function DashboardLayout() {
         {/* User Section */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#E5E7EB] dark:border-[#2D2D44]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F97316] to-[#EC4899] flex items-center justify-center">
-              <span className="text-white font-semibold text-sm">JD</span>
-            </div>
+            <Avatar
+              src={user?.avatar}
+              name={getUserDisplayName()}
+              size="md"
+            />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-[#1A1A2E] dark:text-white truncate">
-                John Doe
+                {getUserDisplayName()}
               </p>
-              <p className="text-xs text-[#6B7280] truncate">john@example.com</p>
+              <p className="text-xs text-[#6B7280] truncate">{user?.email}</p>
             </div>
-            <button className="p-1.5 text-[#6B7280] hover:text-[#EF4444] transition-colors">
+            <button
+              onClick={handleLogout}
+              className="p-1.5 text-[#6B7280] hover:text-[#EF4444] transition-colors"
+              title="Logout"
+            >
               <LogOut size={18} />
             </button>
           </div>
@@ -127,18 +170,14 @@ export function DashboardLayout() {
                 <Menu size={24} />
               </button>
 
-              {/* Search */}
-              <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-[#F8F9FC] dark:bg-[#2D2D44] rounded-lg border border-[#E5E7EB] dark:border-[#3D3D54]">
+              {/* Search - Opens Command Palette */}
+              <button className="hidden sm:flex items-center gap-2 px-3 py-2 bg-[#F8F9FC] dark:bg-[#2D2D44] rounded-lg border border-[#E5E7EB] dark:border-[#3D3D54] hover:border-[#F97316]/30 transition-colors">
                 <Search size={18} className="text-[#6B7280]" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="bg-transparent text-sm text-[#1A1A2E] dark:text-white placeholder-[#6B7280] focus:outline-none w-48"
-                />
-                <kbd className="hidden md:inline-flex items-center px-1.5 py-0.5 text-xs text-[#6B7280] bg-white dark:bg-[#1A1A2E] rounded border border-[#E5E7EB] dark:border-[#3D3D54]">
-                  ⌘K
+                <span className="text-sm text-[#6B7280]">Search...</span>
+                <kbd className="hidden md:inline-flex items-center gap-1 px-1.5 py-0.5 text-xs text-[#6B7280] bg-white dark:bg-[#1A1A2E] rounded border border-[#E5E7EB] dark:border-[#3D3D54]">
+                  <Command size={10} />K
                 </kbd>
-              </div>
+              </button>
             </div>
 
             {/* Right - Actions */}
@@ -146,16 +185,15 @@ export function DashboardLayout() {
               <ThemeToggle />
 
               {/* Notifications */}
-              <button className="relative p-2 text-[#4A4A68] dark:text-[#9CA3AF] hover:text-[#1A1A2E] dark:hover:text-white transition-colors">
-                <Bell size={20} />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#F97316] rounded-full" />
-              </button>
+              <NotificationDropdown />
 
               {/* User Dropdown (Desktop) */}
               <button className="hidden lg:flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-lg hover:bg-[#F8F9FC] dark:hover:bg-[#2D2D44] transition-colors">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#F97316] to-[#EC4899] flex items-center justify-center">
-                  <span className="text-white font-semibold text-xs">JD</span>
-                </div>
+                <Avatar
+                  src={user?.avatar}
+                  name={getUserDisplayName()}
+                  size="sm"
+                />
                 <ChevronDown size={16} className="text-[#6B7280]" />
               </button>
             </div>
@@ -167,6 +205,9 @@ export function DashboardLayout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Command Palette */}
+      <CommandPalette />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 export { DashboardHome } from "./DashboardHome";
+export { SpacesPage } from "./SpacesPage";
 export { ProjectsPage } from "./ProjectsPage";
 export { BoardPage } from "./BoardPage";
 export { CalendarPage } from "./CalendarPage";

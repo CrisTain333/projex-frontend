@@ -1,29 +1,33 @@
 import { IssueType, IssueStatus, Priority } from '@/types';
 
-// Issue Types
-export const ISSUE_TYPES: Record<IssueType, { label: string; icon: string; color: string }> = {
-  epic: { label: 'Epic', icon: 'Zap', color: '#8B5CF6' },
-  story: { label: 'Story', icon: 'BookOpen', color: '#10B981' },
-  bug: { label: 'Bug', icon: 'Bug', color: '#EF4444' },
-  task: { label: 'Task', icon: 'CheckSquare', color: '#3B82F6' },
-  subtask: { label: 'Subtask', icon: 'CornerDownRight', color: '#6B7280' },
-};
+// Issue Types as array for iteration
+export const ISSUE_TYPES: { value: IssueType; label: string; icon: string; color: string }[] = [
+  { value: 'epic', label: 'Epic', icon: 'Zap', color: '#8B5CF6' },
+  { value: 'story', label: 'Story', icon: 'BookOpen', color: '#10B981' },
+  { value: 'feature', label: 'Feature', icon: 'Lightbulb', color: '#10B981' },
+  { value: 'bug', label: 'Bug', icon: 'Bug', color: '#EF4444' },
+  { value: 'task', label: 'Task', icon: 'CheckSquare', color: '#3B82F6' },
+  { value: 'subtask', label: 'Subtask', icon: 'CornerDownRight', color: '#6B7280' },
+];
 
-// Issue Statuses
-export const ISSUE_STATUSES: Record<IssueStatus, { label: string; color: string }> = {
-  todo: { label: 'To Do', color: '#6B7280' },
-  in_progress: { label: 'In Progress', color: '#3B82F6' },
-  review: { label: 'In Review', color: '#F59E0B' },
-  done: { label: 'Done', color: '#10B981' },
-};
+// Issue Statuses as array for iteration
+export const ISSUE_STATUSES: { value: IssueStatus; label: string; color: string }[] = [
+  { value: 'backlog', label: 'Backlog', color: '#6B7280' },
+  { value: 'todo', label: 'To Do', color: '#3B82F6' },
+  { value: 'in_progress', label: 'In Progress', color: '#F59E0B' },
+  { value: 'in_review', label: 'In Review', color: '#8B5CF6' },
+  { value: 'done', label: 'Done', color: '#10B981' },
+  { value: 'cancelled', label: 'Cancelled', color: '#EF4444' },
+];
 
-// Priorities
-export const PRIORITIES: Record<Priority, { label: string; color: string; icon: string }> = {
-  critical: { label: 'Critical', color: '#DC2626', icon: 'AlertTriangle' },
-  high: { label: 'High', color: '#F97316', icon: 'ArrowUp' },
-  medium: { label: 'Medium', color: '#FBBF24', icon: 'Minus' },
-  low: { label: 'Low', color: '#22C55E', icon: 'ArrowDown' },
-};
+// Priorities as array for iteration
+export const PRIORITIES: { value: Priority; label: string; color: string; icon: string }[] = [
+  { value: 'highest', label: 'Highest', color: '#DC2626', icon: 'AlertTriangle' },
+  { value: 'high', label: 'High', color: '#F97316', icon: 'ArrowUp' },
+  { value: 'medium', label: 'Medium', color: '#FBBF24', icon: 'Minus' },
+  { value: 'low', label: 'Low', color: '#22C55E', icon: 'ArrowDown' },
+  { value: 'lowest', label: 'Lowest', color: '#6B7280', icon: 'ArrowDown' },
+];
 
 // Default Colors for Labels
 export const LABEL_COLORS = [

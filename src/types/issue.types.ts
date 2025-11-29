@@ -1,9 +1,9 @@
 import { User } from './user.types';
 import { Label } from './label.types';
 
-export type IssueType = 'epic' | 'story' | 'bug' | 'task' | 'subtask';
-export type IssueStatus = 'todo' | 'in_progress' | 'review' | 'done';
-export type Priority = 'critical' | 'high' | 'medium' | 'low';
+export type IssueType = 'epic' | 'story' | 'bug' | 'task' | 'subtask' | 'feature';
+export type IssueStatus = 'backlog' | 'todo' | 'in_progress' | 'in_review' | 'done' | 'cancelled';
+export type Priority = 'highest' | 'high' | 'medium' | 'low' | 'lowest';
 
 export interface IssueSummary {
   id: string;
@@ -49,6 +49,8 @@ export interface Issue {
   // Tracking
   estimate: number | null;
   timeSpent: number | null;
+  storyPoints: number | null;
+  order: number;
 
   // Counts
   subtaskCount: number;

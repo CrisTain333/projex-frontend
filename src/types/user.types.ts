@@ -2,6 +2,8 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  firstName?: string;
+  lastName?: string;
   avatar: string | null;
   status: 'active' | 'suspended';
   createdAt: string;

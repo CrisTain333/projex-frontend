@@ -1,230 +1,112 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Plus, MoreHorizontal, GripVertical } from "lucide-react";
-
-interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  assignee?: { name: string; initials: string };
-  priority?: "low" | "medium" | "high" | "critical";
-  labels?: string[];
-}
-
-interface Column {
-  id: string;
-  title: string;
-  tasks: Task[];
-}
-
-const initialColumns: Column[] = [
-  {
-    id: "todo",
-    title: "To Do",
-    tasks: [
-      {
-        id: "1",
-        title: "Design system documentation",
-        description: "Create comprehensive docs for the design system",
-        assignee: { name: "Alice", initials: "AL" },
-        priority: "high",
-        labels: ["Design", "Docs"],
-      },
-      {
-        id: "2",
-        title: "User authentication flow",
-        assignee: { name: "Bob", initials: "BO" },
-        priority: "critical",
-        labels: ["Backend"],
-      },
-      {
-        id: "3",
-        title: "Dashboard analytics",
-        description: "Add charts and metrics to dashboard",
-        assignee: { name: "Charlie", initials: "CH" },
-        priority: "medium",
-      },
-    ],
-  },
-  {
-    id: "in-progress",
-    title: "In Progress",
-    tasks: [
-      {
-        id: "4",
-        title: "API integration",
-        description: "Connect frontend with backend APIs",
-        assignee: { name: "Diana", initials: "DI" },
-        priority: "high",
-        labels: ["Frontend", "Backend"],
-      },
-      {
-        id: "5",
-        title: "Mobile responsive design",
-        assignee: { name: "Eve", initials: "EV" },
-        priority: "medium",
-        labels: ["Design"],
-      },
-    ],
-  },
-  {
-    id: "review",
-    title: "Review",
-    tasks: [
-      {
-        id: "6",
-        title: "Code review for auth module",
-        assignee: { name: "Frank", initials: "FR" },
-        priority: "high",
-        labels: ["Review"],
-      },
-    ],
-  },
-  {
-    id: "done",
-    title: "Done",
-    tasks: [],
-  },
-];
-
-const priorityColors = {
-  low: "bg-[#6B7280]",
-  medium: "bg-[#F59E0B]",
-  high: "bg-[#F97316]",
-  critical: "bg-[#EF4444]",
-};
+import { Plus, Filter, Search } from "lucide-react";
+import { KanbanBoard } from "@/components/board";
+import { IssueModal, CreateIssueModal } from "@/components/issues";
+import { Button, Spinner, EmptyState } from "@/components/ui";
+import { useProjectIssues } from "@/hooks/api/useIssues";
+import { useProject } from "@/hooks/api/useProjects";
+import { useBoardStore } from "@/stores";
+import { Issue } from "@/types";
 
 export function BoardPage() {
-  const { projectId } = useParams();
-  const [columns] = useState<Column[]>(initialColumns);
+  const { projectId } = useParams<{ projectId: string }>();
+  const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  const addTask = (columnId: string) => {
-    // TODO: Open modal to create task
-    console.log("Add task to column:", columnId);
-  };
+  const { setFilters, filters } = useBoardStore();
+  const { data: project, isLoading: projectLoading } = useProject(projectId || "");
+  const { data: issues, isLoading: issuesLoading } = useProjectIssues(projectId || "");
+
+  const isLoading = projectLoading || issuesLoading;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
 
   return (
-    <div className="h-[calc(100vh-8rem)]">
+    <div className="h-[calc(100vh-8rem)] flex flex-col">
       {/* Page Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#1A1A2E] dark:text-white">
-          Board
-        </h1>
-        <p className="text-[#4A4A68] dark:text-[#9CA3AF]">
-          Project ID: {projectId}
-        </p>
-      </div>
-
-      {/* Kanban Board */}
-      <div className="flex gap-4 overflow-x-auto pb-4 h-full">
-        {columns.map((column) => (
-          <div
-            key={column.id}
-            className="flex-shrink-0 w-72 bg-[#F3F4F6] dark:bg-[#1A1A2E] rounded-xl"
-          >
-            {/* Column Header */}
-            <div className="flex items-center justify-between p-3 border-b border-[#E5E7EB] dark:border-[#2D2D44]">
-              <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-[#1A1A2E] dark:text-white">
-                  {column.title}
-                </h3>
-                <span className="px-2 py-0.5 text-xs font-medium text-[#6B7280] bg-white dark:bg-[#2D2D44] rounded">
-                  {column.tasks.length}
-                </span>
-              </div>
-              <button className="p-1 text-[#6B7280] hover:text-[#1A1A2E] dark:hover:text-white">
-                <MoreHorizontal size={18} />
-              </button>
-            </div>
-
-            {/* Tasks */}
-            <div className="p-2 space-y-2 max-h-[calc(100%-8rem)] overflow-y-auto">
-              {column.tasks.map((task) => (
-                <div
-                  key={task.id}
-                  className="bg-white dark:bg-[#2D2D44] rounded-lg p-3 border border-[#E5E7EB] dark:border-[#3D3D54] hover:border-[#F97316]/30 cursor-pointer group transition-all"
-                >
-                  {/* Drag Handle */}
-                  <div className="flex items-start gap-2">
-                    <button className="mt-0.5 text-[#D1D5DB] dark:text-[#4A4A68] opacity-0 group-hover:opacity-100 transition-opacity cursor-grab">
-                      <GripVertical size={16} />
-                    </button>
-                    <div className="flex-1 min-w-0">
-                      {/* Labels */}
-                      {task.labels && task.labels.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-2">
-                          {task.labels.map((label) => (
-                            <span
-                              key={label}
-                              className="px-2 py-0.5 text-xs font-medium rounded bg-gradient-to-r from-[#F97316]/10 to-[#EC4899]/10 text-[#F97316]"
-                            >
-                              {label}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Title */}
-                      <h4 className="text-sm font-medium text-[#1A1A2E] dark:text-white mb-1">
-                        {task.title}
-                      </h4>
-
-                      {/* Description */}
-                      {task.description && (
-                        <p className="text-xs text-[#6B7280] line-clamp-2 mb-2">
-                          {task.description}
-                        </p>
-                      )}
-
-                      {/* Footer */}
-                      <div className="flex items-center justify-between mt-2">
-                        {/* Priority */}
-                        {task.priority && (
-                          <div
-                            className={`w-2 h-2 rounded-full ${priorityColors[task.priority]}`}
-                            title={`${task.priority} priority`}
-                          />
-                        )}
-
-                        {/* Assignee */}
-                        {task.assignee && (
-                          <div
-                            className="w-6 h-6 rounded-full bg-gradient-to-br from-[#F97316] to-[#EC4899] flex items-center justify-center"
-                            title={task.assignee.name}
-                          >
-                            <span className="text-white text-[10px] font-medium">
-                              {task.assignee.initials}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Add Task Button */}
-            <div className="p-2">
-              <button
-                onClick={() => addTask(column.id)}
-                className="flex items-center justify-center gap-2 w-full py-2 text-sm text-[#6B7280] hover:text-[#F97316] hover:bg-white dark:hover:bg-[#2D2D44] rounded-lg transition-colors"
-              >
-                <Plus size={18} />
-                Add task
-              </button>
-            </div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-[#1A1A2E] dark:text-white">
+            {project?.name || "Board"}
+          </h1>
+          <p className="text-[#4A4A68] dark:text-[#9CA3AF]">
+            {project?.key ? `${project.key} Board` : "Manage your issues"}
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          {/* Search */}
+          <div className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-[#1A1A2E] rounded-lg border border-[#E5E7EB] dark:border-[#2D2D44]">
+            <Search size={18} className="text-[#6B7280]" />
+            <input
+              type="text"
+              placeholder="Search issues..."
+              value={filters.search}
+              onChange={(e) => setFilters({ search: e.target.value })}
+              className="bg-transparent text-sm text-[#1A1A2E] dark:text-white placeholder-[#6B7280] focus:outline-none w-40"
+            />
           </div>
-        ))}
 
-        {/* Add Column Button */}
-        <div className="flex-shrink-0 w-72">
-          <button className="flex items-center justify-center gap-2 w-full py-3 text-sm text-[#6B7280] hover:text-[#F97316] bg-[#F3F4F6] dark:bg-[#1A1A2E] hover:bg-[#E5E7EB] dark:hover:bg-[#2D2D44] rounded-xl transition-colors">
-            <Plus size={18} />
-            Add column
-          </button>
+          {/* Filter Button */}
+          <Button variant="outline" leftIcon={<Filter size={18} />}>
+            Filter
+          </Button>
+
+          {/* Create Issue */}
+          <Button
+            onClick={() => setIsCreateModalOpen(true)}
+            leftIcon={<Plus size={18} />}
+          >
+            Create Issue
+          </Button>
         </div>
       </div>
+
+      {/* Board */}
+      <div className="flex-1 overflow-hidden">
+        {issues && issues.length > 0 ? (
+          <KanbanBoard
+            issues={issues}
+            onIssueClick={(issue) => setSelectedIssue(issue)}
+          />
+        ) : (
+          <EmptyState
+            icon={<Plus size={48} />}
+            title="No issues yet"
+            description="Create your first issue to get started"
+            action={
+              <Button
+                onClick={() => setIsCreateModalOpen(true)}
+                leftIcon={<Plus size={18} />}
+              >
+                Create Issue
+              </Button>
+            }
+          />
+        )}
+      </div>
+
+      {/* Issue Detail Modal */}
+      <IssueModal
+        issue={selectedIssue}
+        isOpen={!!selectedIssue}
+        onClose={() => setSelectedIssue(null)}
+      />
+
+      {/* Create Issue Modal */}
+      {projectId && (
+        <CreateIssueModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          projectId={projectId}
+        />
+      )}
     </div>
   );
 }

@@ -4,6 +4,8 @@ export interface Space {
   slug: string;
   description: string | null;
   logo: string | null;
+  color: string | null;
+  icon: string | null;
   ownerId: string;
   role: 'admin' | 'member';
   projectCount: number;
