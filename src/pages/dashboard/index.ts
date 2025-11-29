@@ -1,7 +1,9 @@
 export { DashboardHome } from "./DashboardHome";
 export { SpacesPage } from "./SpacesPage";
+export { SpaceDetailPage } from "./SpaceDetailPage";
 export { ProjectsPage } from "./ProjectsPage";
 export { BoardPage } from "./BoardPage";
+export { BacklogPage } from "./BacklogPage";
 export { CalendarPage } from "./CalendarPage";
 export { TeamPage } from "./TeamPage";
 export { SettingsPage } from "./SettingsPage";

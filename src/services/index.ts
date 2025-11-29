@@ -10,4 +10,5 @@ export { attachmentService } from './attachmentService';
 export { labelService } from './labelService';
 export { boardService } from './boardService';
 export { activityService } from './activityService';
+export { sprintService } from './sprintService';
 export { socketService, SOCKET_EVENTS } from './socket';

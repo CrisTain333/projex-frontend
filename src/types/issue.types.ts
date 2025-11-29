@@ -32,6 +32,7 @@ export interface Issue {
   epic: IssueSummary | null;
   parentId: string | null;
   parent: IssueSummary | null;
+  sprintId: string | null;
 
   // People
   reporterId: string;

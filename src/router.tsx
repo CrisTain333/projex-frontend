@@ -10,8 +10,10 @@ import {
   AcceptInvitePage,
   DashboardHome,
   SpacesPage,
+  SpaceDetailPage,
   ProjectsPage,
   BoardPage,
+  BacklogPage,
   CalendarPage,
   TeamPage,
   SettingsPage,
@@ -65,7 +67,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "spaces/:spaceId",
-        element: <ProjectsPage />,
+        element: <SpaceDetailPage />,
       },
       {
         path: "projects",
@@ -74,6 +76,10 @@ export const router = createBrowserRouter([
       {
         path: "projects/:projectId/board",
         element: <BoardPage />,
+      },
+      {
+        path: "projects/:projectId/backlog",
+        element: <BacklogPage />,
       },
       {
         path: "calendar",

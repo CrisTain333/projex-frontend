@@ -16,3 +16,10 @@ export {
   useEnterKey,
 } from './useKeyboardShortcut';
 export { useCopyToClipboard } from './useCopyToClipboard';
+export {
+  useSocketConnection,
+  useProjectSocket,
+  useIssueSocket,
+  useNotificationSocket,
+  useSocketEmit,
+} from './useSocket';

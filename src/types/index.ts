@@ -4,6 +4,7 @@ export * from './space.types';
 export * from './project.types';
 export * from './issue.types';
 export * from './board.types';
+export * from './sprint.types';
 export * from './label.types';
 export * from './member.types';
 export * from './comment.types';
